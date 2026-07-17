@@ -3,6 +3,7 @@ import { fitRenderer, lifecycle, rendererFor } from "./common";
 import { fullscreenVertex, proceduralFragment } from "@/shaders/procedural";
 import type { ProceduralSettings } from "@/components/diamond/types";
 import { assetPath } from "@/lib/assets/path";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 export function createProceduralDiamond(
   canvas: HTMLCanvasElement,
   get: () => ProceduralSettings | object,
@@ -32,11 +33,10 @@ export function createProceduralDiamond(
   const geometry = new THREE.PlaneGeometry(2, 2);
   scene.add(new THREE.Mesh(geometry, material));
   let environment: THREE.Texture | undefined;
-  new THREE.TextureLoader().load(
-    assetPath("environments/studio-small-03.jpg"),
+  new RGBELoader().load(
+    assetPath("environments/afrikaans-church-interior-2k.hdr"),
     (texture) => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
-      texture.colorSpace = THREE.SRGBColorSpace;
       environment = texture;
       uniforms.uEnvironment.value = texture;
       scene.background = texture;

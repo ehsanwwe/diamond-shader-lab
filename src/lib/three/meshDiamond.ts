@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import { assetPath } from "@/lib/assets/path";
 import {
   backfaceFragment,
@@ -50,11 +51,10 @@ export function createMeshDiamond(
     transparent: true,
     side: THREE.FrontSide,
   });
-  new THREE.TextureLoader().load(
-    assetPath("environments/studio-small-03.jpg"),
+  new RGBELoader().load(
+    assetPath("environments/afrikaans-church-interior-2k.hdr"),
     (texture) => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
-      texture.colorSpace = THREE.SRGBColorSpace;
       environment = texture;
       uniforms.uEnvironment.value = texture;
       scene.background = texture;
