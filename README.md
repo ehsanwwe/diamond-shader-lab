@@ -1,7 +1,38 @@
-# Diamond Shader
+<div align="center">
 
-[Live demo](https://ehsanwwe.github.io/diamond-shader/) — two real-time diamond studies built with Three.js and custom GLSL. The first is a shader-only brilliant-cut gemstone reconstructed with a detailed signed-distance field, RGB dispersion, Fresnel response, and repeated internal reflection. The second uses the supplied GLTF geometry, a dedicated backface-normal pass, and multi-bounce refractive shading.
+# 💎 Diamond Shader Lab
 
-Both diamonds are presented inside a local 360° HDR church environment, whose architecture and bright windows reveal the gemstones' facets, fire, reflection, and refraction. The project is a fully static Next.js export, works with touch interaction on mobile browsers, and requires only `npm install`, `npm run dev`, or `npm run build` for local use and deployment.
+**A physically driven real-time diamond renderer built to achieve the most realistic result possible in the browser.**
 
-If you enjoy the experiment, please add a ⭐ to the repository, open an issue with your ideas, or contribute a shader improvement—let's develop the project together and explore more real-time gemstone rendering techniques.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_Project-111827?style=for-the-badge\&logo=googlechrome\&logoColor=white)](https://ehsanwwe.github.io/diamond-shader/)
+
+<img src="./screenshot.PNG" alt="Diamond Shader Lab — real-time diamond rendering" width="100%" />
+
+</div>
+
+## Overview
+
+Diamond Shader Lab explores two advanced GPU rendering techniques for creating a highly realistic diamond in real time:
+
+* **Physical Photon Shader** — a custom GLSL approach focused on physically inspired light behavior.
+* **Multi-Bounce Mesh Refraction** — geometry-based rendering with repeated internal refraction and reflection.
+
+Every frame is generated live on the GPU — no pre-rendered video or baked animation.
+
+## Highlights
+
+* Real-time WebGL rendering
+* Custom GLSL shaders
+* Physically inspired reflection and refraction
+* Interactive 3D presentation
+* Runs directly in the browser
+
+## Built With
+
+`Next.js` · `React` · `Three.js` · `WebGL` · `GLSL`
+
+---
+
+<div align="center">
+  Built by <strong>Ehsan Moradi</strong>
+</div>
