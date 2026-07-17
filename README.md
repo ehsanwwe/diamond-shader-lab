@@ -112,6 +112,6 @@ The task brief described `DiamondFragment2d.glsl` as absent, but the supplied `r
 
 Contributions are welcome—see [CONTRIBUTING.md](CONTRIBUTING.md). Released under the [MIT License](LICENSE). Original experiment and this showcase are credited to **Ehsan Moradi**.
 
-The viewport panorama is **Studio Small 03** by Greg Zaal via [Poly Haven](https://polyhaven.com/a/studio_small_03), released under CC0.
+The 360° viewport environment is **Studio Small 03** by Greg Zaal via [Poly Haven](https://polyhaven.com/a/studio_small_03), released under CC0. It is projected equirectangularly and sampled by the custom shaders for the visible background, reflections, and refractions.
 
 Suggested topics: `threejs`, `webgl`, `glsl`, `shaders`, `nextjs`, `creative-coding`, `raymarching`, `procedural-generation`, `realtime-graphics`.

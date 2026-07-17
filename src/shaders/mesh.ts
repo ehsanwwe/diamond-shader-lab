@@ -1,6 +1,6 @@
-import { environmentGLSL } from './environment';
-export const backfaceVertex=`varying vec3 vNormal; void main(){vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
-export const backfaceFragment=`varying vec3 vNormal;void main(){gl_FragColor=vec4(vNormal*.5+.5,1.);}`;
-export const diamondVertex=`varying vec3 vNormal;varying vec3 vWorld;void main(){vec4 w=modelMatrix*vec4(position,1.);vWorld=w.xyz;vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*viewMatrix*w;}`;
-export const diamondFragment=`precision highp float;uniform sampler2D uBackface;uniform vec2 uResolution;uniform float uIor,uDispersion,uTint,uExposure;varying vec3 vNormal;varying vec3 vWorld;${environmentGLSL}
+import { environmentGLSL } from "./environment";
+export const backfaceVertex = `varying vec3 vNormal; void main(){vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
+export const backfaceFragment = `varying vec3 vNormal;void main(){gl_FragColor=vec4(vNormal*.5+.5,1.);}`;
+export const diamondVertex = `varying vec3 vNormal;varying vec3 vWorld;void main(){vec4 w=modelMatrix*vec4(position,1.);vWorld=w.xyz;vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*viewMatrix*w;}`;
+export const diamondFragment = `precision highp float;uniform sampler2D uBackface;uniform vec2 uResolution;uniform float uIor,uDispersion,uTint,uExposure;varying vec3 vNormal;varying vec3 vWorld;${environmentGLSL}
 void main(){vec3 V=normalize(vWorld-cameraPosition),N=normalize(vNormal);vec3 back=normalize(texture2D(uBackface,gl_FragCoord.xy/uResolution).rgb*2.-1.);vec3 internal=normalize(mix(N,-back,.62));float eta=1./uIor;vec3 rr=refract(V,internal,eta);vec3 cr;cr.r=environment(refract(V,internal,max(.25,eta-uDispersion))).r;cr.g=environment(rr).g;cr.b=environment(refract(V,internal,eta+uDispersion)).b;vec3 refl=environment(reflect(V,N));float f0=pow((uIor-1.)/(uIor+1.),2.);float F=f0+(1.-f0)*pow(1.-max(dot(-V,N),0.),5.);vec3 tint=mix(vec3(1.),vec3(1.,.88,.67),uTint*.32);vec3 col=mix(cr*1.7,refl*2.2,F)*tint*uExposure;col+=pow(max(dot(reflect(V,N),normalize(vec3(-.4,.8,.3))),0.),80.)*2.;col=col/(col+vec3(1.));col=pow(col,vec3(1./2.2));gl_FragColor=vec4(col,.96);}`;

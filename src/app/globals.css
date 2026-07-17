@@ -2,4 +2,4 @@
 
 /* Local CC0 studio panorama; the custom property keeps project-page paths valid. */
 .viewport{background-color:#090a0e;background-image:linear-gradient(90deg,rgba(6,7,10,.64),rgba(6,7,10,.08) 52%,rgba(6,7,10,.54)),var(--studio-background);background-position:center;background-size:cover}
-.canvas-wrap canvas[aria-label^="procedural"]{opacity:.78}
+.canvas-wrap canvas[aria-label^="procedural"]{opacity:1}

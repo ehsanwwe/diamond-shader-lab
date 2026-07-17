@@ -1,6 +1,6 @@
-import { environmentGLSL } from './environment';
-export const fullscreenVertex=`void main(){gl_Position=vec4(position,1.);}`;
-export const proceduralFragment=`precision highp float;uniform vec2 uResolution,uPointer;uniform float uTime,uIor,uBrightness,uContrast,uRainbow;${environmentGLSL}
+import { environmentGLSL } from "./environment";
+export const fullscreenVertex = `void main(){gl_Position=vec4(position,1.);}`;
+export const proceduralFragment = `precision highp float;uniform vec2 uResolution,uPointer;uniform float uTime,uIor,uBrightness,uContrast,uRainbow;${environmentGLSL}
 mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);} vec3 turn(vec3 p){p.xz*=rot(uPointer.x);p.yz*=rot(uPointer.y);return p;}
 float gem(vec3 q){vec3 p=turn(q);float a=atan(p.z,p.x),sector=3.14159265/8.;float f=floor((a+sector*.5)/sector)*sector;float radial=dot(p.xz,vec2(cos(f),sin(f)));float crown=max(radial+.72*p.y-.83,p.y-.38);float pavilion=max(radial-1.18*p.y-.89,-p.y-.95);float girdle=radial-.91;return max(girdle,max(crown,pavilion));}
 vec3 normalAt(vec3 p){vec2 e=vec2(.002,0);return normalize(vec3(gem(p+e.xyy)-gem(p-e.xyy),gem(p+e.yxy)-gem(p-e.yxy),gem(p+e.yyx)-gem(p-e.yyx)));}
