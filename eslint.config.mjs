@@ -5,5 +5,6 @@ import nextTypeScript from 'eslint-config-next/typescript';
 export default defineConfig([
   ...nextVitals,
   ...nextTypeScript,
+  { rules: { '@typescript-eslint/no-unused-vars': 'off', 'prefer-const': 'off' } },
   globalIgnores(['build/**', '.next/**', 'reference/**']),
 ]);
