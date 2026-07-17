@@ -1,0 +1,3 @@
+'use client';
+type Field = { key:string; label:string; min:number; max:number; step:number };
+export function Controls<T extends Record<string, number>>({ value, fields, onChange, onReset }: { value:T; fields:Field[]; onChange:(v:T)=>void; onReset:()=>void }) { return <aside className="controls"><div className="controls-title"><div><p className="eyebrow">OPTICAL CONTROLS</p><h3>Material study</h3></div><button onClick={onReset}>Reset</button></div>{fields.map(f=><label key={f.key}><span>{f.label}<output>{value[f.key]?.toFixed(f.step < .01 ? 2 : 1)}</output></span><input type="range" min={f.min} max={f.max} step={f.step} value={value[f.key]} onChange={e=>onChange({...value,[f.key]:Number(e.target.value)})}/></label>)}</aside>; }
