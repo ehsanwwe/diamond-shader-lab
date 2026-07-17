@@ -15,7 +15,7 @@ Diamond Shader Lab modernizes Ehsan Moradi's legacy Three.js experiment into a f
 |---|---|---|
 | Shape | Supplied `ehsan.gltf` brilliant cut | Procedural faceted SDF |
 | Carrier | Diamond mesh | Full-screen plane only |
-| Optics | Backface-normal target + front shader | Ray-marched volume |
+| Optics | Backface-normal target + four-bounce internal trace | Five-bounce ray-marched volume |
 | Strength | Exact authored silhouette | No gemstone geometry dependency |
 
 Both pipelines implement custom GLSL reflection, refraction, Fresnel response, local analytical environment lighting, and chromatic dispersion. Only the selected demo owns a WebGL context and animation loop.
