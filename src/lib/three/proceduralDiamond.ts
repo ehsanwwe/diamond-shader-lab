@@ -78,7 +78,7 @@ export function createProceduralDiamond(
       const s = get() as ProceduralSettings;
       if (!dragging && !reduced) target.x += s.speed * 0.00025;
       pointer.lerp(target, 0.09);
-      uniforms.uTime.value = t * 0.001;
+      uniforms.uTime.value = reduced ? 0 : t * 0.001 * s.speed;
       uniforms.uIor.value = s.ior;
       uniforms.uBrightness.value = s.brightness;
       uniforms.uContrast.value = s.contrast;

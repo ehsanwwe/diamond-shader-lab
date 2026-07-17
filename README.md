@@ -103,7 +103,7 @@ Device pixel ratio is capped at 2, rendering pauses while the document is hidden
 | `DiamondVertex.glsl`, `DiamondFragment.glsl` | `src/shaders/mesh.ts` (corrected and redesigned) |
 | Backface shaders | Dedicated `backScene` and encoded world-normal pass |
 | `reference/main2d.js` | `src/lib/three/proceduralDiamond.ts` |
-| `DiamondFragment2d.glsl` | `src/shaders/procedural.ts` (modern reconstruction) |
+| `DiamondFragment2d.glsl` | `src/shaders/procedural.ts` (corrected ShaderToy-method reconstruction) |
 | Blade templates | Replaced by the App Router showcase; never imported |
 
 The task brief described `DiamondFragment2d.glsl` as absent, but the supplied `reference/shaders/` directory in this repository does contain it. The new shader remains a clean reconstruction of the surviving interface and artistic intent rather than a blind port: it removes the cube GLTF carrier, repairs unsafe state, and produces the diamond procedurally. Missing cubemap images were not downloaded; a local analytical environment replaces them.
