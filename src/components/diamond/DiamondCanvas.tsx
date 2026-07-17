@@ -15,5 +15,6 @@ export function DiamondCanvas({mode,settings}:{mode:'mesh'|'procedural';settings
   try{const instance=create(canvas.current,()=>settingsRef.current,()=>!disposed&&setStatus('ready'),()=>!disposed&&setStatus('error'));return()=>{disposed=true;instance.dispose()}}
   catch(error){console.warn('Diamond renderer unavailable:',error);const id=requestAnimationFrame(()=>setStatus('unsupported'));return()=>{disposed=true;cancelAnimationFrame(id)}}
  },[mode]);
- return <div className="canvas-wrap"><canvas ref={canvas} aria-label={`${mode} interactive diamond rendering`}/>{status!=='ready'&&<div className="canvas-status" role="status">{status==='loading'?'Cutting light…':status==='unsupported'?'WebGL2 is unavailable or disabled in this browser.':'The renderer could not initialize.'}</div>}</div>
+ const loadingName=mode==='procedural'?'Realistic Physical Photon Shader':'Multi-Bounce Mesh Refraction';
+ return <div className="canvas-wrap"><canvas ref={canvas} aria-label={`${mode} interactive diamond rendering`}/>{status!=='ready'&&<div className="canvas-status" role="status">{status==='loading'?loadingName:status==='unsupported'?'WebGL2 is unavailable or disabled in this browser.':'The renderer could not initialize.'}</div>}</div>
 }

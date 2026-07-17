@@ -28,6 +28,7 @@ body {
 }
 .simple-showcase {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(18px, 3vw, 38px);
   width: min(1320px, calc(100% - 36px));
   margin: 0 auto;
@@ -36,8 +37,8 @@ body {
 .simple-viewport {
   position: relative;
   width: 100%;
-  height: min(76dvh, 760px);
-  min-height: 420px;
+  height: min(62dvh, 580px);
+  min-height: 360px;
   overflow: hidden;
   border: 1px solid #dededb;
   border-radius: 20px;
@@ -87,16 +88,17 @@ body {
     animation-duration: 1.8s;
   }
 }
-@media (max-width: 600px) {
+@media (max-width: 820px) {
   .simple-header {
     padding-top: 26px;
   }
   .simple-showcase {
+    grid-template-columns: 1fr;
     width: calc(100% - 24px);
     gap: 16px;
   }
   .simple-viewport {
-    height: 68dvh;
+    height: 62dvh;
     min-height: 360px;
     border-radius: 14px;
   }
