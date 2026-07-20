@@ -24,7 +24,11 @@ vec3 rotateGem(vec3 q){
  return p;
 }
 
-float boundGem(vec3 q){vec3 p=rotateGem(q);float s=atan(p.y,p.x);float d=max(dot(vec3(cos(s),sin(s),1.444),p)-1.05,dot(vec3(cos(s),sin(s),-1.072),p)-1.05);return max(d,p.z-.35);}
+// True conservative bounding sphere (unit gradient) around the gem. The old
+// cone bound was not a valid distance from every direction, so the outer march
+// stepped clean over the gem when viewed from above and it vanished — a sphere
+// is safe from every orbit angle.
+float boundGem(vec3 q){return length(q)-1.0;}
 
 float gem(vec3 q){
  vec3 p=rotateGem(q);float s=atan(p.y,p.x),af=4./PI;
@@ -44,7 +48,11 @@ float gem(vec3 q){
 
 vec3 normalAt(vec3 p,bool inside){vec2 e=vec2(.0012,0.);vec3 n=normalize(vec3(gem(p+e.xyy)-gem(p-e.xyy),gem(p+e.yxy)-gem(p-e.yxy),gem(p+e.yyx)-gem(p-e.yyx)));return inside?-n:n;}
 
-float march(vec3 ro,vec3 rd,bool inside,out vec3 p){float t=inside?.012:.2;float d=1.;if(!inside){for(int i=0;i<24;i++){p=ro+rd*t;d=boundGem(p);if(abs(d)<.002||t>FAR)break;t+=d*.92;}}for(int i=0;i<30;i++){p=ro+rd*t;d=inside?-gem(p):gem(p);if(abs(d)<.0012||t>FAR)break;t+=d*(inside?.42:.78);}return t;}
+// The facet planes use non-unit normals (up to ~2.4x), so gem() over-estimates
+// distance. Small step factors keep the march from stepping past thin facets at
+// grazing angles (which showed up as chunks of the silhouette being clipped);
+// the higher iteration counts make up for the smaller steps.
+float march(vec3 ro,vec3 rd,bool inside,out vec3 p){float t=inside?.012:.2;float d=1.;if(!inside){for(int i=0;i<32;i++){p=ro+rd*t;d=boundGem(p);if(d<.002||t>FAR)break;t+=d*.95;}}for(int i=0;i<64;i++){p=ro+rd*t;d=inside?-gem(p):gem(p);if(abs(d)<.0009||t>FAR)break;t+=d*(inside?.4:.42);}return t;}
 
 float schlick(vec3 ray,vec3 n,float ior){float r0=(1.-ior)/(1.+ior);r0*=r0;return clamp(r0+(1.-r0)*pow(1.-max(dot(-ray,n),0.),5.),0.,.92);}
 
