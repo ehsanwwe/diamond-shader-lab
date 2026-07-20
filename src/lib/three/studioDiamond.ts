@@ -45,8 +45,8 @@ export function createStudioDiamond(
     uDistance: { value: distance },
     // flat light-grey backdrop (linear; sRGB-encoded by the output pass ~= #d0d0d0)
     uBackground: { value: 0.62 },
-    // darkest refraction floor: ~0.2 sRGB grey == 80% black, never pure black
-    uRefractFloor: { value: 0.03 },
+    // 0 = refraction may reach full 100% black (no floor)
+    uRefractFloor: { value: 0 },
   };
   const material = new THREE.ShaderMaterial({
     vertexShader: fullscreenVertex,
