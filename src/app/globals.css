@@ -28,7 +28,7 @@ body {
 }
 .simple-showcase {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: clamp(18px, 3vw, 38px);
   width: min(1320px, calc(100% - 36px));
   margin: 0 auto;

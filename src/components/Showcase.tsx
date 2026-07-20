@@ -1,7 +1,11 @@
 "use client";
 
 import { DiamondCanvas } from "./diamond/DiamondCanvas";
-import type { MeshSettings, ProceduralSettings } from "./diamond/types";
+import type {
+  MeshSettings,
+  ProceduralSettings,
+  StudioSettings,
+} from "./diamond/types";
 
 const proceduralSettings: ProceduralSettings = {
   ior: 2.42,
@@ -19,6 +23,14 @@ const meshSettings: MeshSettings = {
   rotation: 0.6,
 };
 
+const studioSettings: StudioSettings = {
+  ior: 2.42,
+  brightness: 1.05,
+  contrast: 1.2,
+  specular: 1.2,
+  glow: 0.8,
+};
+
 export function Showcase() {
   return (
     <>
@@ -31,6 +43,9 @@ export function Showcase() {
         </section>
         <section className="simple-viewport">
           <DiamondCanvas mode="mesh" settings={meshSettings} />
+        </section>
+        <section className="simple-viewport">
+          <DiamondCanvas mode="studio" settings={studioSettings} />
         </section>
       </main>
     </>
