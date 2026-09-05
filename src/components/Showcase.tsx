@@ -1,26 +1,14 @@
 "use client";
 
 import { DiamondCanvas } from "./diamond/DiamondCanvas";
-import type {
-  MeshSettings,
-  ProceduralSettings,
-  StudioSettings,
-} from "./diamond/types";
-
-const proceduralSettings: ProceduralSettings = {
-  ior: 2.42,
-  brightness: 1,
-  contrast: 1.15,
-  rainbow: 0.65,
-  speed: 0.9,
-};
+import type { MeshSettings, RingSettings, StudioSettings } from "./diamond/types";
 
 const meshSettings: MeshSettings = {
   ior: 2.42,
-  dispersion: 0.045,
-  tint: 0,
-  brightness: 1,
-  rotation: 0.6,
+  dispersion: 0.65,
+  brightness: 1.5,
+  contrast: 1.15,
+  glow: 0.8,
 };
 
 const studioSettings: StudioSettings = {
@@ -31,6 +19,15 @@ const studioSettings: StudioSettings = {
   glow: 0.8,
 };
 
+const ringSettings: RingSettings = {
+  ior: 2.42,
+  dispersion: 0.65,
+  brightness: 1.5,
+  contrast: 1.15,
+  glow: 0.35,
+  rotation: 1.2,
+};
+
 export function Showcase() {
   return (
     <>
@@ -39,13 +36,13 @@ export function Showcase() {
       </header>
       <main className="simple-showcase">
         <section className="simple-viewport">
-          <DiamondCanvas mode="procedural" settings={proceduralSettings} />
-        </section>
-        <section className="simple-viewport">
           <DiamondCanvas mode="mesh" settings={meshSettings} />
         </section>
         <section className="simple-viewport">
           <DiamondCanvas mode="studio" settings={studioSettings} />
+        </section>
+        <section className="simple-viewport">
+          <DiamondCanvas mode="ring" settings={ringSettings} />
         </section>
       </main>
     </>

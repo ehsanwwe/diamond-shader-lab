@@ -6,3 +6,8 @@ out/
 .env*
 !.env.example
 tsconfig.tsbuildinfo
+
+# local editor / personal files
+.idea/
+claude/
+.claude/settings.local.json
