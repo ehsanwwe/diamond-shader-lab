@@ -11,3 +11,4 @@ tsconfig.tsbuildinfo
 .idea/
 claude/
 .claude/settings.local.json
+*.blend1
