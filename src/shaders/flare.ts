@@ -14,7 +14,7 @@ export const FlareShader = {
     uTexel: { value: new Vector2(1, 1) },
     uFlare: { value: 0.3 },     // strength; 0 disables the pass entirely
     uThreshold: { value: 1.2 }, // linear HDR luminance a pixel needs to streak
-    uLength: { value: 3.0 },    // pixel step between taps (streak reach)
+    uLength: { value: 1.0 },    // pixel step between taps (streak reach = 18 * uLength px)
   },
   vertexShader: `varying vec2 vUv;
 void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,

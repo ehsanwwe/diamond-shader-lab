@@ -11,6 +11,7 @@ const fields: Field[] = [
   { key: "highlight", label: "Highlight", min: 0, max: 4, step: 0.01 },
   { key: "glow", label: "Glow", min: 0, max: 1.5, step: 0.01 },
   { key: "flare", label: "Lens flare", min: 0, max: 1.5, step: 0.01 },
+  { key: "flareSize", label: "Flare size", min: 0.1, max: 6, step: 0.05 },
 ];
 
 // The text under the sliders is meant to be pasted back into chat: it is the

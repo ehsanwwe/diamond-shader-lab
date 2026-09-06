@@ -24,11 +24,12 @@ const studioSettings: StudioSettings = {
 const ringSettings: RingSettings = {
   ior: 2.42,
   dispersion: 0.65,
-  brightness: 1.6,
-  contrast: 1.35,
-  highlight: 1.2,
-  glow: 0.2,
-  flare: 0.35,
+  brightness: 1.43,
+  contrast: 1.09,
+  highlight: 2.18,
+  glow: 0.04,
+  flare: 0.01,
+  flareSize: 1,
   rotation: 1.2,
 };
 

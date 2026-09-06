@@ -204,6 +204,7 @@ export function createRingScene(
       silver.envMapIntensity = 0.7 * s.brightness;
       bloom.strength = s.glow;
       flare.material.uniforms.uFlare.value = s.flare;
+      flare.material.uniforms.uLength.value = s.flareSize; // pixel step between streak taps
       controls.autoRotateSpeed = s.rotation;
       controls.update();
       composer.render();
