@@ -111,8 +111,10 @@ void main(){
 export const stoneVertex = `varying vec3 vLocal;
 void main(){vLocal=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
 
-// Output stays HDR: bright facets go above 1 so the scene's bloom / lens flare
-// pick them up, and uHighlight pushes the brightest facets further (sparkle).
+// Facet detail is Reinhard-mapped (always < 1) exactly like the fullscreen box,
+// so the stone keeps its cut from every angle. On top, only the true glints
+// (facets reflecting the HDR windows, luminance well above 1) are added back as
+// HDR scaled by uHighlight, so bloom / lens flare react to them.
 export const stoneFragment = `precision highp float;
 uniform vec3 uLocalCam;   // camera position in the stone's local space
 uniform float uHighlight;
@@ -122,7 +124,8 @@ ${hullTraceGLSL}
 void main(){
  vec3 rd=normalize(vLocal-uLocalCam);
  vec3 col=traceDiamondHDR(uLocalCam,rd);
+ vec3 base=col/(1.+col);
  float l=dot(col,vec3(.299,.587,.114));
- col*=1.+uHighlight*smoothstep(.45,1.3,l);
- gl_FragColor=vec4(col,1.);
+ vec3 glint=col*smoothstep(1.,4.,l)*uHighlight;
+ gl_FragColor=vec4(base+glint,1.);
 }`;

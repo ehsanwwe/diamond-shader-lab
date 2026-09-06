@@ -37,8 +37,8 @@ vec3 streak(vec2 dir){
   float w=(1.-t)*(1.-t)*(1.-t);                // fast falloff along the streak (no pow: pow(0,y) is NaN on some GPUs)
   vec2 o=dir*uTexel*uLength*float(i);
   // opposite ends get opposite chromatic tint
-  acc+=w*bright(vUv+o)*vec3(1.,.92,.85);
-  acc+=w*bright(vUv-o)*vec3(.85,.92,1.);
+  acc+=w*bright(vUv+o)*vec3(1.,.96,.93);
+  acc+=w*bright(vUv-o)*vec3(.93,.96,1.);
   wsum+=2.*w;
  }
  return acc/wsum;

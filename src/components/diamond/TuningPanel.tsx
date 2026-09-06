@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { RingSettings } from "./types";
+import type { RingSettings, RingView } from "./types";
 
-type Field = { key: keyof RingSettings; label: string; min: number; max: number; step: number };
+type NumericKey = { [K in keyof RingSettings]: RingSettings[K] extends number ? K : never }[keyof RingSettings];
+type Field = { key: NumericKey; label: string; min: number; max: number; step: number };
 
 const fields: Field[] = [
   { key: "brightness", label: "Brightness", min: 0.5, max: 3, step: 0.01 },
@@ -14,24 +15,33 @@ const fields: Field[] = [
   { key: "flareSize", label: "Flare size", min: 0.1, max: 6, step: 0.05 },
 ];
 
+const round = (n: number) => Number(n.toFixed(2));
+
 // The text under the sliders is meant to be pasted back into chat: it is the
-// exact object literal that goes into ringSettings in Showcase.tsx.
-export function settingsText(s: RingSettings): string {
-  const keys = Object.keys(s) as (keyof RingSettings)[];
-  return `ringSettings = { ${keys.map((k) => `${k}: ${s[k]}`).join(", ")} }`;
+// exact object literal that goes into ringSettings in Showcase.tsx, with the
+// live camera (azimuth / polar / zoom) merged in so a view can become the default.
+export function settingsText(s: RingSettings, view?: RingView): string {
+  const merged: RingSettings = { ...s, ...view };
+  const keys = Object.keys(merged) as (keyof RingSettings)[];
+  const fmt = (v: number | boolean) => (typeof v === "number" ? round(v) : v);
+  return `ringSettings = { ${keys.map((k) => `${k}: ${fmt(merged[k])}`).join(", ")} }`;
 }
 
 export function TuningPanel({
   value,
+  view,
   defaults,
   onChange,
+  onResetView,
 }: {
   value: RingSettings;
+  view?: RingView;
   defaults: RingSettings;
   onChange: (next: RingSettings) => void;
+  onResetView?: () => void;
 }) {
   const [copied, setCopied] = useState(false);
-  const text = settingsText(value);
+  const text = settingsText(value, view);
 
   useEffect(() => {
     if (!copied) return;
@@ -52,7 +62,15 @@ export function TuningPanel({
     <aside className="tuning" aria-label="ring tuning">
       <div className="tuning-head">
         <strong>Ring tuning</strong>
-        <button type="button" onClick={() => onChange(defaults)}>Reset</button>
+        <button
+          type="button"
+          onClick={() => {
+            onChange(defaults);
+            onResetView?.();
+          }}
+        >
+          Reset
+        </button>
       </div>
       {fields.map((f) => (
         <label key={f.key}>
@@ -70,11 +88,24 @@ export function TuningPanel({
           />
         </label>
       ))}
+      <label className="tuning-check">
+        <input
+          type="checkbox"
+          checked={value.autoRotate ?? true}
+          onChange={(e) => onChange({ ...value, autoRotate: e.target.checked })}
+        />
+        <span>Auto rotate</span>
+      </label>
+      {view && (
+        <p className="tuning-view">
+          view: azimuth {round(view.azimuth)}° · polar {round(view.polar)}° · zoom {round(view.zoom)}
+        </p>
+      )}
       <textarea
         className="tuning-text"
         readOnly
         value={text}
-        rows={3}
+        rows={4}
         onFocus={(e) => e.currentTarget.select()}
       />
       <button type="button" className="tuning-copy" onClick={copy}>

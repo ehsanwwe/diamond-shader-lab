@@ -181,3 +181,17 @@ body {
     width: min(250px, calc(100% - 20px));
   }
 }
+.tuning-check {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 8px;
+}
+.tuning-check input {
+  accent-color: #171717;
+}
+.tuning-view {
+  margin: 0 0 6px;
+  color: #666;
+  font-variant-numeric: tabular-nums;
+}

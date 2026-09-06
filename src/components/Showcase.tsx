@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { DiamondCanvas } from "./diamond/DiamondCanvas";
+import { useRef, useState } from "react";
+import { DiamondCanvas, type DiamondCanvasHandle } from "./diamond/DiamondCanvas";
 import { TuningPanel } from "./diamond/TuningPanel";
-import type { MeshSettings, RingSettings, StudioSettings } from "./diamond/types";
+import type { MeshSettings, RingSettings, RingView, StudioSettings } from "./diamond/types";
 
 const meshSettings: MeshSettings = {
   ior: 2.42,
@@ -31,10 +31,16 @@ const ringSettings: RingSettings = {
   flare: 0.01,
   flareSize: 1,
   rotation: 1.2,
+  autoRotate: true,
+  azimuth: 38,
+  polar: 62,
+  zoom: 1,
 };
 
 export function Showcase() {
   const [ring, setRing] = useState<RingSettings>(ringSettings);
+  const [view, setView] = useState<RingView>(ringSettings);
+  const ringCanvas = useRef<DiamondCanvasHandle>(null);
 
   return (
     <>
@@ -49,10 +55,16 @@ export function Showcase() {
           <DiamondCanvas mode="studio" settings={studioSettings} />
         </section>
         <section className="simple-viewport">
-          <DiamondCanvas mode="ring" settings={ring} />
+          <DiamondCanvas ref={ringCanvas} mode="ring" settings={ring} onView={setView} />
         </section>
       </main>
-      <TuningPanel value={ring} defaults={ringSettings} onChange={setRing} />
+      <TuningPanel
+        value={ring}
+        view={view}
+        defaults={ringSettings}
+        onChange={setRing}
+        onResetView={() => ringCanvas.current?.setView(ringSettings)}
+      />
     </>
   );
 }
