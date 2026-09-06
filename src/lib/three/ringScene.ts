@@ -10,6 +10,7 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
 import { assetPath } from "@/lib/assets/path";
 import { MAX_PLANES, stoneFragment, stoneVertex } from "@/shaders/hullDiamond";
+import { FlareShader } from "@/shaders/flare";
 import { fitRenderer, lifecycle, rendererFor } from "./common";
 import { hullPlanes } from "./meshDiamond";
 import type { RingSettings } from "@/components/diamond/types";
@@ -103,6 +104,9 @@ export function createRingScene(
   // threshold above 1 (linear HDR): only the brightest glints glare, silver and backdrop stay clean
   const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.25, 1.3);
   composer.addPass(bloom);
+  // lens flare: four-point star streaks radiating from the brightest glints (HDR, before output)
+  const flare = new ShaderPass(FlareShader);
+  composer.addPass(flare);
   composer.addPass(new OutputPass());
   const fxaa = new ShaderPass(FXAAShader);
   composer.addPass(fxaa);
@@ -181,6 +185,7 @@ export function createRingScene(
     fit();
     composer.setSize(w, h);
     bloom.setSize(w * dpr, h * dpr);
+    flare.material.uniforms.uTexel.value.set(1 / (w * dpr), 1 / (h * dpr));
     fxaa.material.uniforms.resolution.value.set(1 / (w * dpr), 1 / (h * dpr));
   };
   resize();
@@ -196,6 +201,7 @@ export function createRingScene(
       stoneUniforms.uContrast.value = s.contrast;
       silver.envMapIntensity = 0.7 * s.brightness;
       bloom.strength = s.glow;
+      flare.material.uniforms.uFlare.value = s.flare;
       controls.autoRotateSpeed = s.rotation;
       controls.update();
       composer.render();

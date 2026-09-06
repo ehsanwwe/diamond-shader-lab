@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { DiamondCanvas } from "./diamond/DiamondCanvas";
+import { TuningPanel } from "./diamond/TuningPanel";
 import type { MeshSettings, RingSettings, StudioSettings } from "./diamond/types";
 
 const meshSettings: MeshSettings = {
@@ -25,10 +27,13 @@ const ringSettings: RingSettings = {
   brightness: 1.5,
   contrast: 1.15,
   glow: 0.15,
+  flare: 0.3,
   rotation: 1.2,
 };
 
 export function Showcase() {
+  const [ring, setRing] = useState<RingSettings>(ringSettings);
+
   return (
     <>
       <header className="simple-header">
@@ -42,9 +47,10 @@ export function Showcase() {
           <DiamondCanvas mode="studio" settings={studioSettings} />
         </section>
         <section className="simple-viewport">
-          <DiamondCanvas mode="ring" settings={ringSettings} />
+          <DiamondCanvas mode="ring" settings={ring} />
         </section>
       </main>
+      <TuningPanel value={ring} defaults={ringSettings} onChange={setRing} />
     </>
   );
 }
