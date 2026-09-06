@@ -31,7 +31,7 @@ const ringSettings: RingSettings = {
   flare: 0.01,
   flareSize: 0.75,
   rotation: 1.2,
-  autoRotate: false,
+  autoRotate: true,
   azimuth: 119.16,
   polar: 60.13,
   zoom: 0.59,

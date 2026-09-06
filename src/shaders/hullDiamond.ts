@@ -111,12 +111,12 @@ void main(){
 export const stoneVertex = `varying vec3 vLocal;
 void main(){vLocal=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
 
-// Facet detail is Reinhard-mapped (always < 1) exactly like the fullscreen box,
-// so the stone keeps its cut from every angle. On top, only the rare true glints
-// are added as HDR so bloom / lens flare react to them. The environment's
-// luminance median is ~0.09 and 5% of it is above 1, but only ~0.2% (windows,
-// sun) is above 30 - the glint window sits in that tail, so whole facets never
-// flip to white when the ring turns; only pin-point sparkles do.
+// Same output path as the fullscreen box: contrast, exposure, then Reinhard, so
+// the stone is always < 1 and reads identically from every orbit angle (an
+// unclamped/HDR output let ACES clip whole facet families to white while the
+// ring turned, which looked like the refraction switching off). uHighlight is a
+// bounded gain on the brightest reflections (environment luminance tail, 6..30)
+// applied BEFORE the tone map, so it brightens sparkles without ever clipping.
 export const stoneFragment = `precision highp float;
 uniform vec3 uLocalCam;   // camera position in the stone's local space
 uniform float uHighlight;
@@ -126,8 +126,7 @@ ${hullTraceGLSL}
 void main(){
  vec3 rd=normalize(vLocal-uLocalCam);
  vec3 col=traceDiamondHDR(uLocalCam,rd);
- vec3 base=col/(1.+col);
  float l=dot(col,vec3(.299,.587,.114));
- vec3 glint=(col/max(l,1e-3))*smoothstep(6.,30.,l)*uHighlight;   // keeps the dispersion tint
- gl_FragColor=vec4(base+glint,1.);
+ col*=1.+uHighlight*smoothstep(6.,30.,l);
+ gl_FragColor=vec4(col/(1.+col),1.);
 }`;
