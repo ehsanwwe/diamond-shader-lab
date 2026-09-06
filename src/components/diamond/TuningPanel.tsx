@@ -6,6 +6,9 @@ import type { RingSettings } from "./types";
 type Field = { key: keyof RingSettings; label: string; min: number; max: number; step: number };
 
 const fields: Field[] = [
+  { key: "brightness", label: "Brightness", min: 0.5, max: 3, step: 0.01 },
+  { key: "contrast", label: "Contrast", min: 0.8, max: 2.2, step: 0.01 },
+  { key: "highlight", label: "Highlight", min: 0, max: 4, step: 0.01 },
   { key: "glow", label: "Glow", min: 0, max: 1.5, step: 0.01 },
   { key: "flare", label: "Lens flare", min: 0, max: 1.5, step: 0.01 },
 ];
@@ -54,14 +57,14 @@ export function TuningPanel({
         <label key={f.key}>
           <span>
             {f.label}
-            <output>{value[f.key].toFixed(2)}</output>
+            <output>{(value[f.key] ?? 0).toFixed(2)}</output>
           </span>
           <input
             type="range"
             min={f.min}
             max={f.max}
             step={f.step}
-            value={value[f.key]}
+            value={value[f.key] ?? 0}
             onChange={(e) => onChange({ ...value, [f.key]: Number(e.target.value) })}
           />
         </label>

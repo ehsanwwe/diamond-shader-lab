@@ -75,6 +75,7 @@ export function createRingScene(
     uDispersion: { value: 0.65 },
     uExposure: { value: 1.5 },
     uContrast: { value: 1.15 },
+    uHighlight: { value: 1 },
     uPlaneCount: { value: 0 },
     uPlanes: { value: new Float32Array(MAX_PLANES * 4) },
   };
@@ -199,6 +200,7 @@ export function createRingScene(
       stoneUniforms.uDispersion.value = s.dispersion;
       stoneUniforms.uExposure.value = s.brightness;
       stoneUniforms.uContrast.value = s.contrast;
+      stoneUniforms.uHighlight.value = s.highlight;
       silver.envMapIntensity = 0.7 * s.brightness;
       bloom.strength = s.glow;
       flare.material.uniforms.uFlare.value = s.flare;

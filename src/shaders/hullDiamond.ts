@@ -70,16 +70,21 @@ vec3 traceDiamond(vec3 ro,vec3 rd,float ior){
  return mix(transmitted,reflected,f);
 }
 
-// three channels at slightly different IOR -> dispersion; contrast, exposure, Reinhard
-vec3 shadeDiamond(vec3 ro,vec3 rd){
+// three channels at slightly different IOR -> dispersion; contrast + exposure, LINEAR, unclamped (HDR)
+vec3 traceDiamondHDR(vec3 ro,vec3 rd){
  float spread=.032*uDispersion;
  vec3 col;
  col.r=traceDiamond(ro,rd,uIor+spread*.25).r;
  col.g=traceDiamond(ro,rd,uIor+spread*.75).g;
  col.b=traceDiamond(ro,rd,uIor+spread).b;
  col=(col-.5)*uContrast+.5;
- col*=uExposure;
- return col/(1.+max(col,vec3(0.)));   // Reinhard tone map, LINEAR out (sRGB done by OutputPass)
+ return max(col*uExposure,vec3(0.));
+}
+
+// fullscreen box: Reinhard tone map, LINEAR out (sRGB done by OutputPass)
+vec3 shadeDiamond(vec3 ro,vec3 rd){
+ vec3 col=traceDiamondHDR(ro,rd);
+ return col/(1.+col);
 }`;
 
 // Fullscreen version: the gem sits at the origin, rays come from the camera.
@@ -106,12 +111,18 @@ void main(){
 export const stoneVertex = `varying vec3 vLocal;
 void main(){vLocal=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
 
+// Output stays HDR: bright facets go above 1 so the scene's bloom / lens flare
+// pick them up, and uHighlight pushes the brightest facets further (sparkle).
 export const stoneFragment = `precision highp float;
 uniform vec3 uLocalCam;   // camera position in the stone's local space
+uniform float uHighlight;
 varying vec3 vLocal;
 ${hullTraceGLSL}
 
 void main(){
  vec3 rd=normalize(vLocal-uLocalCam);
- gl_FragColor=vec4(shadeDiamond(uLocalCam,rd),1.);
+ vec3 col=traceDiamondHDR(uLocalCam,rd);
+ float l=dot(col,vec3(.299,.587,.114));
+ col*=1.+uHighlight*smoothstep(.45,1.3,l);
+ gl_FragColor=vec4(col,1.);
 }`;
