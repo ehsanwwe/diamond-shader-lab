@@ -1,21 +1,19 @@
 import { environmentGLSL } from "./environment";
 
-export const fullscreenVertex = `void main(){gl_Position=vec4(position,1.);}`;
-
-// Analytic convex-polytope tracer. The diamond is described by the facet planes
-// of the model's convex hull (extracted from math-diamond.gltf at load time and
+// Analytic convex-polytope diamond tracer, applied as the material of every
+// stone of the ring. The diamond is described by the facet planes of the
+// model's convex hull (extracted from the stone geometry at load time and
 // uploaded as uPlanes). Optics: Fresnel reflection, refraction in, up to 5
 // internal bounces (total-internal-reflection) and chromatic dispersion.
 //
 // The 360 environment is sampled in MONOCHROME for refraction/reflection, but the
 // three colour channels are traced at slightly different IOR, so the dispersion
 // still separates into a coloured rainbow at the facet edges. Output is LINEAR;
-// the post pipeline adds bloom (glow + glare) and the sRGB output pass.
+// the post pipeline adds bloom, lens flare and the sRGB output pass.
 export const MAX_PLANES = 96;
 
-// Shared tracer core. Rays are traced in the diamond's own (plane) space; uEnvRot
-// rotates directions into world space before the environment lookup, so the same
-// code serves the fullscreen box (identity) and stones placed anywhere in a scene.
+// Rays are traced in the stone's own (plane) space; uEnvRot rotates directions
+// into world space before the environment lookup.
 export const hullTraceGLSL = `
 uniform float uIor,uDispersion,uExposure,uContrast;
 uniform int uPlaneCount;
@@ -79,44 +77,15 @@ vec3 traceDiamondHDR(vec3 ro,vec3 rd){
  col.b=traceDiamond(ro,rd,uIor+spread).b;
  col=(col-.5)*uContrast+.5;
  return max(col*uExposure,vec3(0.));
-}
-
-// fullscreen box: Reinhard tone map, LINEAR out (sRGB done by OutputPass)
-vec3 shadeDiamond(vec3 ro,vec3 rd){
- vec3 col=traceDiamondHDR(ro,rd);
- return col/(1.+col);
 }`;
 
-// Fullscreen version: the gem sits at the origin, rays come from the camera.
-export const hullFragment = `precision highp float;
-uniform vec2 uResolution;
-uniform vec3 uCamPos;
-uniform mat4 uInvViewProj;
-uniform float uBackground;
-${hullTraceGLSL}
-
-void main(){
- vec2 ndc=(gl_FragCoord.xy/uResolution)*2.-1.;
- vec4 far=uInvViewProj*vec4(ndc,1.,1.);far/=far.w;
- vec3 ro=uCamPos;
- vec3 rd=normalize(far.xyz-ro);
- // flat grey backdrop where the ray misses the gem (env still used inside the stone)
- float mtN,mtF;vec3 mnN,mnF;
- if(!intersectHull(ro,rd,mtN,mnN,mtF,mnF)||mtN<0.){gl_FragColor=vec4(vec3(uBackground),1.);return;}
- gl_FragColor=vec4(shadeDiamond(ro,rd),1.);
-}`;
-
-// Mesh version: applied as the material of a stone whose geometry IS the hull.
-// The rasterised surface point gives the entry ray; the tracer does the rest.
+// The rasterised surface point of the stone gives the entry ray; the tracer does the rest.
 export const stoneVertex = `varying vec3 vLocal;
 void main(){vLocal=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
 
-// Same output path as the fullscreen box: contrast, exposure, then Reinhard, so
-// the stone is always < 1 and reads identically from every orbit angle (an
-// unclamped/HDR output let ACES clip whole facet families to white while the
-// ring turned, which looked like the refraction switching off). uHighlight is a
-// bounded gain on the brightest reflections (environment luminance tail, 6..30)
-// applied BEFORE the tone map, so it brightens sparkles without ever clipping.
+// Facet detail is Reinhard-mapped (always < 1) so the stone keeps its cut from
+// every angle. On top, the true glints (luminance above 1) are added back as HDR
+// scaled by uHighlight, so bloom / lens flare react to them.
 export const stoneFragment = `precision highp float;
 uniform vec3 uLocalCam;   // camera position in the stone's local space
 uniform float uHighlight;

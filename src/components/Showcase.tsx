@@ -1,25 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { DiamondCanvas, type DiamondCanvasHandle } from "./diamond/DiamondCanvas";
-import { TuningPanel } from "./diamond/TuningPanel";
-import type { MeshSettings, RingSettings, RingView, StudioSettings } from "./diamond/types";
-
-const meshSettings: MeshSettings = {
-  ior: 2.42,
-  dispersion: 0.65,
-  brightness: 1.5,
-  contrast: 1.15,
-  glow: 0.8,
-};
-
-const studioSettings: StudioSettings = {
-  ior: 2.42,
-  brightness: 1.05,
-  contrast: 1.2,
-  specular: 1.2,
-  glow: 0.8,
-};
+import { RingCanvas } from "./diamond/RingCanvas";
+import type { RingSettings } from "./diamond/types";
 
 const ringSettings: RingSettings = {
   ior: 2.42,
@@ -34,37 +16,14 @@ const ringSettings: RingSettings = {
   autoRotate: true,
   azimuth: 119.16,
   polar: 60.13,
-  zoom: 0.59,
+  zoom: 0.82,
 };
 
 export function Showcase() {
-  const [ring, setRing] = useState<RingSettings>(ringSettings);
-  const [view, setView] = useState<RingView>(ringSettings);
-  const ringCanvas = useRef<DiamondCanvasHandle>(null);
-
   return (
-    <>
-      <header className="simple-header">
-        <h1>Diamond Shader</h1>
-      </header>
-      <main className="simple-showcase">
-        <section className="simple-viewport">
-          <DiamondCanvas mode="mesh" settings={meshSettings} />
-        </section>
-        <section className="simple-viewport">
-          <DiamondCanvas mode="studio" settings={studioSettings} />
-        </section>
-        <section className="simple-viewport">
-          <DiamondCanvas ref={ringCanvas} mode="ring" settings={ring} onView={setView} />
-        </section>
-      </main>
-      <TuningPanel
-        value={ring}
-        view={view}
-        defaults={ringSettings}
-        onChange={setRing}
-        onResetView={() => ringCanvas.current?.setView(ringSettings)}
-      />
-    </>
+    <main className="ring-page">
+      <RingCanvas settings={ringSettings} />
+      <p className="copyright">© {new Date().getFullYear()} Ehsan Moradi</p>
+    </main>
   );
 }

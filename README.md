@@ -1,7 +1,7 @@
-# Diamond Shader
+# Diamond Ring
 
-[Live demo](https://ehsanwwe.github.io/diamond-shader/) — two real-time diamond studies built with Three.js and custom GLSL. The first is a shader-only brilliant-cut gemstone reconstructed with a detailed signed-distance field, RGB dispersion, Fresnel response, and repeated internal reflection. The second uses the supplied GLTF geometry, a dedicated backface-normal pass, and multi-bounce refractive shading.
+[Live demo](https://ehsanwwe.github.io/diamond-shader/) — a silver halo diamond ring rendered in real time with Three.js. The ring is modelled in Blender by `scripts/blender_diamond_ring.py` (open `diamond_ring.blend`, or run it headless with `blender -b diamond_ring.blend -P scripts/blender_diamond_ring.py`) and exported to `public/models/diamond-ring.glb`. Every stone is an instance of the brilliant-cut diamond in `public/models/math-diamond.gltf`, built by `scripts/blender_math_diamond.py`.
 
-Both diamonds are presented inside a local 360° HDR church environment, whose architecture and bright windows reveal the gemstones' facets, fire, reflection, and refraction. The project is a fully static Next.js export, works with touch interaction on mobile browsers, and requires only `npm install`, `npm run dev`, or `npm run build` for local use and deployment.
+In the browser the silver is a PBR metal and each stone is shaded by an analytic convex-hull ray tracer written in GLSL: Fresnel reflection, refraction, up to five internal bounces and RGB dispersion, lit by a 360° HDR church environment. Bloom and a lens-flare pass add the sparkle. Drag to orbit, wheel to zoom.
 
-If you enjoy the experiment, please add a ⭐ to the repository, open an issue with your ideas, or contribute a shader improvement—let's develop the project together and explore more real-time gemstone rendering techniques.
+The project is a static Next.js export: `npm install`, then `npm run dev` or `npm run build`.
