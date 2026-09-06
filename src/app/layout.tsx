@@ -4,9 +4,9 @@ import { assetPath } from "@/lib/assets/path";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ehsanwwe.github.io/"),
-  title: { default: "Diamond Shader Lab", template: "%s · Diamond Shader Lab" },
+  title: { default: "Diamond Ring", template: "%s · Diamond Ring" },
   description:
-    "Two approaches to real-time gemstone rendering with Three.js and custom GLSL.",
+    "A silver halo diamond ring rendered in real time with Three.js and a custom GLSL diamond tracer.",
   keywords: [
     "Three.js",
     "WebGL",
@@ -20,30 +20,30 @@ export const metadata: Metadata = {
   alternates: { canonical: "/diamond-shader/" },
   icons: { icon: assetPath("brand/favicon.svg") },
   openGraph: {
-    title: "Diamond Shader Lab",
-    description: "Two approaches to real-time gemstone rendering",
+    title: "Diamond Ring",
+    description: "Real-time silver halo diamond ring",
     url: "/diamond-shader/",
-    siteName: "Diamond Shader Lab",
+    siteName: "Diamond Ring",
     images: [
       {
         url: assetPath("brand/social-preview.svg"),
         width: 1200,
         height: 630,
-        alt: "A stylized faceted diamond",
+        alt: "A silver halo diamond ring",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Diamond Shader Lab",
-    description: "Two approaches to real-time gemstone rendering",
+    title: "Diamond Ring",
+    description: "Real-time silver halo diamond ring",
     images: [assetPath("brand/social-preview.svg")],
   },
 };
 export const viewport: Viewport = {
-  themeColor: "#08090d",
-  colorScheme: "dark",
+  themeColor: "#f3f3f1",
+  colorScheme: "light",
 };
 export default function RootLayout({
   children,
