@@ -112,9 +112,11 @@ export const stoneVertex = `varying vec3 vLocal;
 void main(){vLocal=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
 
 // Facet detail is Reinhard-mapped (always < 1) exactly like the fullscreen box,
-// so the stone keeps its cut from every angle. On top, only the true glints
-// (facets reflecting the HDR windows, luminance well above 1) are added back as
-// HDR scaled by uHighlight, so bloom / lens flare react to them.
+// so the stone keeps its cut from every angle. On top, only the rare true glints
+// are added as HDR so bloom / lens flare react to them. The environment's
+// luminance median is ~0.09 and 5% of it is above 1, but only ~0.2% (windows,
+// sun) is above 30 - the glint window sits in that tail, so whole facets never
+// flip to white when the ring turns; only pin-point sparkles do.
 export const stoneFragment = `precision highp float;
 uniform vec3 uLocalCam;   // camera position in the stone's local space
 uniform float uHighlight;
@@ -126,6 +128,6 @@ void main(){
  vec3 col=traceDiamondHDR(uLocalCam,rd);
  vec3 base=col/(1.+col);
  float l=dot(col,vec3(.299,.587,.114));
- vec3 glint=col*smoothstep(1.,4.,l)*uHighlight;
+ vec3 glint=(col/max(l,1e-3))*smoothstep(6.,30.,l)*uHighlight;   // keeps the dispersion tint
  gl_FragColor=vec4(base+glint,1.);
 }`;

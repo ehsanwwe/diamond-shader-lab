@@ -24,17 +24,17 @@ const studioSettings: StudioSettings = {
 const ringSettings: RingSettings = {
   ior: 2.42,
   dispersion: 0.65,
-  brightness: 1.43,
-  contrast: 1.09,
-  highlight: 2.18,
-  glow: 0.04,
+  brightness: 1.66,
+  contrast: 1.11,
+  highlight: 3.36,
+  glow: 0.07,
   flare: 0.01,
-  flareSize: 1,
+  flareSize: 0.75,
   rotation: 1.2,
-  autoRotate: true,
-  azimuth: 38,
-  polar: 62,
-  zoom: 1,
+  autoRotate: false,
+  azimuth: 119.16,
+  polar: 60.13,
+  zoom: 0.59,
 };
 
 export function Showcase() {
