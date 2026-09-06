@@ -101,7 +101,7 @@ export function createRingScene(
   const composer = new EffectComposer(renderer, hdrTarget);
   composer.addPass(new RenderPass(scene, camera));
   // threshold above 1 (linear HDR): only the brightest glints glare, silver and backdrop stay clean
-  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.3, 1.1);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.25, 1.3);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
   const fxaa = new ShaderPass(FXAAShader);

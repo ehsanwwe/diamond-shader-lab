@@ -24,7 +24,7 @@ const ringSettings: RingSettings = {
   dispersion: 0.65,
   brightness: 1.5,
   contrast: 1.15,
-  glow: 0.35,
+  glow: 0.15,
   rotation: 1.2,
 };
 
