@@ -126,7 +126,8 @@ ${hullTraceGLSL}
 void main(){
  vec3 rd=normalize(vLocal-uLocalCam);
  vec3 col=traceDiamondHDR(uLocalCam,rd);
+ vec3 base=col/(1.+col);                          // facet detail, always < 1
  float l=dot(col,vec3(.299,.587,.114));
- col*=1.+uHighlight*smoothstep(6.,30.,l);
- gl_FragColor=vec4(col/(1.+col),1.);
+ vec3 glint=col*smoothstep(1.,4.,l)*uHighlight;   // HDR glints for bloom / lens flare
+ gl_FragColor=vec4(base+glint,1.);
 }`;

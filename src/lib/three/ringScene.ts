@@ -126,6 +126,10 @@ export function createRingScene(
   });
   const invModel = new THREE.Matrix4();
   const stoneBeforeRender = (mesh: THREE.Object3D) => {
+    // The material is shared: three.js only re-uploads uniforms when the material
+    // changes between draws, so consecutive stones would reuse the previous stone's
+    // camera. Force the upload for every stone.
+    stone.uniformsNeedUpdate = true;
     invModel.copy(mesh.matrixWorld).invert();
     stoneUniforms.uLocalCam.value.copy(camera.position).applyMatrix4(invModel);
     // local -> world rotation (stones are uniformly scaled, so normalising the columns is enough)
